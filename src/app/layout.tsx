@@ -3,8 +3,8 @@ import Providers from '@/components/Providers'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Hyperliquid Explorer',
-  description: 'Hyperliquid Explorer',
+  title: 'HyperEVM Explorer',
+  description: 'HyperEVM Explorer',
   icons: {
     icon: [
       {
