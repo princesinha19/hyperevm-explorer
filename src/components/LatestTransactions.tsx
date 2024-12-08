@@ -1,10 +1,26 @@
 import { useLatestBlocks } from '@/hooks/useLatestBlocks';
 import { formatEther } from 'ethers';
 import Link from 'next/link';
+import { useState } from 'react';
 
 export default function LatestTransactions() {
   const { transactions, isLoading } = useLatestBlocks();
+  const [currentPage, setCurrentPage] = useState(1);
+  const transactionsPerPage = 10;
   
+  // Calculate total pages
+  const totalPages = Math.ceil(transactions.length / transactionsPerPage);
+  
+  // Get current transactions
+  const indexOfLastTransaction = currentPage * transactionsPerPage;
+  const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage;
+  const currentTransactions = transactions.slice(indexOfFirstTransaction, indexOfLastTransaction);
+
+  // Change page
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <div className="bg-[#171B20] rounded-lg border border-[#2B3238] p-6">
       <h2 className="text-2xl font-medium mb-6 text-white">Latest Transactions</h2>
@@ -24,12 +40,10 @@ export default function LatestTransactions() {
 
           <div className="divide-y divide-[#2B3238] transaction-list">
             <div className="transaction-rows space-y-0">
-              {transactions
-                .slice(0, window.innerWidth < 768 ? 3 : transactions.length)
-                .map((tx) => (
+              {currentTransactions.map((tx) => (
                 <div 
                   key={tx.hash} 
-                  className="flex flex-col md:grid md:grid-cols-[1.5fr_1fr_1fr_1fr_1fr] gap-2 py-4 transaction-row"
+                  className="flex flex-col md:grid md:grid-cols-[1.5fr_1fr_1fr_1fr_1fr] gap-2 py-3.5 transaction-row"
                 >
                   <div className="flex flex-col space-y-2 md:space-y-0">
                     <div className="text-gray-400 md:hidden text-sm">Txn Hash:</div>
@@ -69,6 +83,42 @@ export default function LatestTransactions() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Pagination Controls */}
+          <div className="flex justify-between items-center mt-4 text-sm">
+            <div className="text-gray-400">
+              Showing {indexOfFirstTransaction + 1}-{Math.min(indexOfLastTransaction, transactions.length)} of {transactions.length} transactions
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-3 py-1 rounded border border-[#2B3238] disabled:opacity-50 disabled:cursor-not-allowed text-gray-300 hover:bg-[#2B3238] transition-colors"
+              >
+                Previous
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
+                <button
+                  key={number}
+                  onClick={() => handlePageChange(number)}
+                  className={`px-3 py-1 rounded border ${
+                    currentPage === number
+                      ? 'bg-[#51d2c1] text-[#171B20] border-[#51d2c1]'
+                      : 'border-[#2B3238] text-gray-300 hover:bg-[#2B3238]'
+                  } transition-colors`}
+                >
+                  {number}
+                </button>
+              ))}
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="px-3 py-1 rounded border border-[#2B3238] disabled:opacity-50 disabled:cursor-not-allowed text-gray-300 hover:bg-[#2B3238] transition-colors"
+              >
+                Next
+              </button>
             </div>
           </div>
         </div>

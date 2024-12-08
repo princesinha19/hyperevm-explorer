@@ -64,7 +64,7 @@ const processNewBlock = async (
     const uniqueTransactions = Array.from(
       new Map(combined.map(tx => [tx.hash, tx])).values()
     ).sort((a, b) => Number(b.blockNumber - a.blockNumber))
-     .slice(0, 10);
+     .slice(0, 50);
 
     return {
       blocks: newBlocks,
@@ -112,7 +112,7 @@ const fetchLatestBlocks = async (queryClient: any): Promise<{
       blocks: initialBlocks.sort((a, b) => Number(b.block.number - a.block.number)),
       transactions: initialTransactions
         .sort((a, b) => Number(b.blockNumber - a.blockNumber))
-        .slice(0, 10)
+        .slice(0, 50)
     };
   }
 
