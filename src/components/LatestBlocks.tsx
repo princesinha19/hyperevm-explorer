@@ -24,7 +24,7 @@ export default function LatestBlocks() {
           <div key={block.number} className="flex items-center justify-between p-3 hover:bg-[#1A1F23] rounded">
             <div className="flex items-center gap-3">
               <Link href={`/block/${block.number}`} className="text-[#51d2c1] hover:underline">
-                #{block.number.toString()}
+                {block.number.toString()}
               </Link>
               <div className="text-sm text-gray-400">
                 {block.transactions.length} txns

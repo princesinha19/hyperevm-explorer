@@ -55,7 +55,7 @@ export default function LatestTransactions() {
                   <div className="flex flex-col space-y-2 md:space-y-0">
                     <div className="text-gray-400 md:hidden text-sm">Block:</div>
                     <Link href={`/block/${tx.blockNumber}`} className="text-gray-300 hover:underline text-sm">
-                      #{tx.blockNumber.toString()}
+                      {tx.blockNumber.toString()}
                     </Link>
                   </div>
 
