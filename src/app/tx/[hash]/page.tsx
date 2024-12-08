@@ -55,18 +55,20 @@ export default async function TransactionPage(props: any) {
               </div>
               <div className="grid grid-cols-[200px_1fr] gap-4">
                 <div className="text-gray-400">Block:</div>
-                <div className="text-[#51d2c1]">#{tx.blockNumber?.toString()}</div>
+                <Link href={`/block/${tx.blockNumber}`} className="text-[#51d2c1] hover:underline">
+                  {tx.blockNumber?.toString()}
+                </Link>
               </div>
               <div className="grid grid-cols-[200px_1fr] gap-4">
                 <div className="text-gray-400">From:</div>
-                <Link href={`/address/${tx.from}`} className="break-all hover:text-[#51d2c1]">
+                <Link href={`/address/${tx.from}`} className="break-all hover:text-[#51d2c1] hover:underline">
                   {tx.from}
                 </Link>
               </div>
               <div className="grid grid-cols-[200px_1fr] gap-4">
                 <div className="text-gray-400">To:</div>
                 {tx.to ? (
-                  <Link href={`/address/${tx.to}`} className="break-all hover:text-[#51d2c1]">
+                  <Link href={`/address/${tx.to}`} className="break-all hover:text-[#51d2c1] hover:underline">
                     {tx.to}
                   </Link>
                 ) : (
@@ -91,7 +93,7 @@ export default async function TransactionPage(props: any) {
               </div>
               <div className="grid grid-cols-[200px_1fr] gap-4">
                 <div className="text-gray-400">Total Cost:</div>
-                <div>{gasCost} TESTH</div>
+                <div className="break-all">{gasCost} TESTH</div>
               </div>
               {decodedInteraction && (
                 <div className="grid grid-cols-[200px_1fr] gap-4">

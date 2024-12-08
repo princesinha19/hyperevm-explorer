@@ -48,7 +48,7 @@ export default async function BlockPage(props: any) {
                 key={tx.hash}
                 className="block hover:bg-[#1A1F23] p-2 rounded"
               >
-                <div className="text-[#51d2c1]">{tx.hash}</div>
+                <div className="text-[#51d2c1] truncate">{tx.hash}</div>
               </Link>
             ))}
           </div>
