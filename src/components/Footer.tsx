@@ -1,6 +1,32 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+
 export default function Footer() {
+  const [isFixed, setIsFixed] = useState(true);
+
+  useEffect(() => {
+    const checkHeight = () => {
+      setIsFixed(document.body.scrollHeight <= window.innerHeight);
+    };
+
+    checkHeight();
+    const observer = new MutationObserver(checkHeight);
+    observer.observe(document.body, { 
+      childList: true, 
+      subtree: true 
+    });
+
+    window.addEventListener('resize', checkHeight);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', checkHeight);
+    };
+  }, []);
+
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-[#0D1114] border-t border-[#2B3238] py-4">
+    <div className={`${isFixed ? 'fixed bottom-0 left-0 right-0' : 'relative mt-8'} bg-[#0D1114] border-t border-[#2B3238] py-4`}>
       <div className="max-w-4xl mx-auto px-8 flex justify-between items-center">
         <a 
           href="https://hyperfoundation.org/" 

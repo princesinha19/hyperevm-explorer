@@ -16,7 +16,8 @@ const formatTransactions = (block: any, blockNumber: bigint): Transaction[] => {
         from: tx.from,
         to: tx.to,
         value: tx.value,
-        blockNumber
+        blockNumber,
+        input: tx.input,
       };
     })
     .filter((tx: Transaction | null): tx is Transaction => tx !== null);
@@ -33,7 +34,6 @@ const processNewBlock = async (
   try {
     // Check if block already exists
     if (existingBlocks.some(b => b.block.number === blockNumber)) {
-      console.log('Block already processed:', blockNumber.toString());
       return null;
     }
 

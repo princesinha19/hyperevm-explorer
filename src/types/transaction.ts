@@ -4,4 +4,5 @@ export interface Transaction {
   to: `0x${string}` | null;
   value: bigint;
   blockNumber: bigint;
+  input: string;
 }

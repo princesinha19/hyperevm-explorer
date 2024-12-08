@@ -3,6 +3,15 @@ import { formatEther } from 'ethers';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
 import BackButton from '@/components/BackButton';
+import { decodeInteraction } from '@/utils/decodeTransaction';
+
+interface DecodedInteraction {
+  contract?: { name: string };
+  name?: string;
+  type?: string;
+  args?: any[];
+  data?: string;
+}
 
 export default async function TransactionPage(props: any) {
   // Get the hash parameter first
@@ -29,6 +38,9 @@ export default async function TransactionPage(props: any) {
     const gasCost = tx.gasPrice && receipt.gasUsed ? 
       formatEther(tx.gasPrice * receipt.gasUsed) : 
       '0';
+
+    // Add this after getting tx data
+    const decodedInteraction: DecodedInteraction | null = tx.to && tx.input ? decodeInteraction(tx.input, tx.to) : null;
 
     return (
       <div className="min-h-screen bg-[#0D1114] p-8">
@@ -78,9 +90,75 @@ export default async function TransactionPage(props: any) {
                 <div>{receipt.gasUsed.toString()} ({((Number(receipt.gasUsed) / Number(tx.gas)) * 100).toFixed(2)}%)</div>
               </div>
               <div className="grid grid-cols-[200px_1fr] gap-4">
-                <div className="text-gray-400">Gas Cost:</div>
+                <div className="text-gray-400">Total Cost:</div>
                 <div>{gasCost} TESTH</div>
               </div>
+              {decodedInteraction && (
+                <div className="grid grid-cols-[200px_1fr] gap-4">
+                  <div className="text-gray-400">
+                    {decodedInteraction.contract?.name ? 'Decode Input Data:' : 'Input Data:'}
+                  </div>
+                  <div>
+                    {decodedInteraction.contract?.name ? (
+                      <div>
+                        <div className="grid grid-cols-[auto_auto_1fr] gap-10">
+                          <div>
+                            <div className="text-gray-400 text-sm">Contract</div>
+                            <div className="text-[#51d2c1] mt-1">
+                              <span className="py-1 bg-[#1A1F23] rounded text-sm">
+                                {decodedInteraction.contract?.name || 'Unknown Contract'}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="flex justify-center">
+                            <div className="w-[1px] h-full bg-gray-400"></div>
+                          </div>
+
+                          <div>
+                            <div className="text-gray-400 text-sm">Function Call</div>
+                            <div className="text-[#51d2c1] mt-1">
+                              {decodedInteraction.name || decodedInteraction.type}
+                            </div>
+                          </div>
+                        </div>
+
+                        {decodedInteraction.args && (
+                          <div className="mt-3">
+                            <div className="text-gray-400 text-sm mb-1">Arguments:</div>
+                            <div className="space-y-1">
+                              {decodedInteraction.args.map((arg, index) => (
+                                <div key={index} className="text-gray-300 break-all">
+                                  {typeof arg === 'string' && arg.startsWith('0x') ? (
+                                    <Link href={`/address/${arg}`} className="text-[#51d2c1] hover:underline">
+                                      {arg}
+                                    </Link>
+                                  ) : (
+                                    <span>{arg}</span>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {decodedInteraction.data && (
+                          <div className="mt-3">
+                            <div className="text-gray-400 text-sm mb-1">Input:</div>
+                            <div className="text-gray-400 break-all">
+                              {decodedInteraction.data}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="text-gray-400 break-all">
+                        {tx.input}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           <Footer />
