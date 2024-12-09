@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Footer from '@/components/Footer';
 import BackButton from '@/components/BackButton';
 import { decodeInteraction } from '@/utils/decodeTransaction';
+import { getRelativeTime } from '@/utils/time';
 
 interface DecodedInteraction {
   contract?: { name: string };
@@ -19,13 +20,13 @@ export default async function TransactionPage(props: any) {
   
   try {
     const [tx, receipt] = await Promise.all([
-      publicClient.getTransaction({ 
-        hash: hash as `0x${string}` 
-      }),
-      publicClient.getTransactionReceipt({ 
-        hash: hash as `0x${string}` 
-      })
+      publicClient.getTransaction({ hash: hash as `0x${string}` }),
+      publicClient.getTransactionReceipt({ hash: hash as `0x${string}` })
     ]);
+
+    const block = await publicClient.getBlock({
+      blockNumber: tx.blockNumber
+    });
 
     if (!tx) {
       throw new Error('Transaction not found');
@@ -58,6 +59,15 @@ export default async function TransactionPage(props: any) {
                 <Link href={`/block/${tx.blockNumber}`} className="text-[#51d2c1] hover:underline">
                   {tx.blockNumber?.toString()}
                 </Link>
+              </div>
+              <div className="grid grid-cols-[200px_1fr] gap-4">
+                <div className="text-gray-400">Timestamp:</div>
+                <div>
+                  {new Date(Number(block.timestamp) * 1000).toLocaleString()}{' '}
+                  <span className="text-gray-400">
+                    ({getRelativeTime(block.timestamp)})
+                  </span>
+                </div>
               </div>
               <div className="grid grid-cols-[200px_1fr] gap-4">
                 <div className="text-gray-400">From:</div>
