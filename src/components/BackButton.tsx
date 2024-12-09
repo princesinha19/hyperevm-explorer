@@ -1,13 +1,27 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 export default function BackButton() {
+  const [isClient, setIsClient] = useState(false)
   const router = useRouter()
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  const handleBack = () => {
+    router.push('/')
+  }
+
+  if (!isClient) {
+    return null
+  }
 
   return (
     <button
-      onClick={() => router.back()}
+      onClick={handleBack}
       className="flex items-center text-gray-400 hover:text-[#51d2c1] transition-colors mb-4"
     >
       <svg 
