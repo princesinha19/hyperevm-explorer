@@ -2,14 +2,17 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useLatestBlocks } from '@/hooks/useLatestBlocks'
 import Logo from '@/components/Logo'
 import DashboardStats from '@/components/DashboardStats'
 import LatestBlocks from '@/components/LatestBlocks'
 import LatestTransactions from '@/components/LatestTransactions'
+import RpcError from '@/components/RpcError'
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState('')
   const router = useRouter()
+  const { error } = useLatestBlocks()
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -52,48 +55,54 @@ export default function Home() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <form onSubmit={handleSearch} className="mb-8">
-          <div className="flex gap-2">
-            <input
-              type="text"
-              placeholder="Search by Address / Txn Hash / Block"
-              className="flex-1 p-3 bg-[#171B20] border border-[#2B3238] rounded-lg text-[#E1E4E7]"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <button
-              type="submit"
-              className="px-6 py-3 bg-[#3DD8AF] text-[#0B0E11] rounded-lg font-medium hover:bg-[#35C69D] transition-colors flex items-center gap-2"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+        {error ? (
+          <RpcError />
+        ) : (
+          <>
+            <form onSubmit={handleSearch} className="mb-8">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="Search by Address / Txn Hash / Block"
+                  className="flex-1 p-3 bg-[#171B20] border border-[#2B3238] rounded-lg text-[#E1E4E7]"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
-              </svg>
-            </button>
-          </div>
-        </form>
+                <button
+                  type="submit"
+                  className="px-6 py-3 bg-[#3DD8AF] text-[#0B0E11] rounded-lg font-medium hover:bg-[#35C69D] transition-colors flex items-center gap-2"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </form>
 
-        <DashboardStats />
+            <DashboardStats />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-1">
-            <LatestBlocks />
-          </div>
-          <div className="lg:col-span-2">
-            <LatestTransactions />
-          </div>
-        </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-1">
+                <LatestBlocks />
+              </div>
+              <div className="lg:col-span-2">
+                <LatestTransactions />
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       <footer className="border-t border-[#2B3238] mt-1">

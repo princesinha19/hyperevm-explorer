@@ -135,17 +135,20 @@ const fetchLatestBlocks = async (queryClient: any): Promise<{
 export function useLatestBlocks() {
   const queryClient = useQueryClient();
 
-  const { data, isLoading, isFetching } = useQuery({
+  const { data, isLoading, isFetching, error } = useQuery({
     queryKey: ['latestBlocks'],
     queryFn: () => fetchLatestBlocks(queryClient),
-    refetchInterval: 1000,
-    placeholderData: undefined
+    refetchInterval: (query) => query.state.error ? 30000 : 1000,
+    placeholderData: undefined,
+    retry: 3,
+    retryDelay: 30000
   });
 
   return {
     blocks: data?.blocks ?? [],
     transactions: data?.transactions ?? [],
     isLoading,
-    isFetching
+    isFetching,
+    error: Boolean(error)
   };
 } 
