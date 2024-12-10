@@ -38,7 +38,7 @@ export default async function AddressPage(props: any) {
             </div>
             <div className="grid grid-cols-[200px_1fr] gap-4">
               <div className="text-gray-400">Balance:</div>
-              <div className='break-all'>{formatEther(details.balance)} TESTH</div>
+              <div className='break-all'>{formatEther(details.balance)} HYPE</div>
             </div>
             <div className="grid grid-cols-[200px_1fr] gap-4">
               <div className="text-gray-400">Nonce:</div>

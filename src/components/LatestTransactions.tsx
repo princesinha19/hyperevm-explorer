@@ -78,7 +78,7 @@ export default function LatestTransactions() {
                   <div className="flex flex-col space-y-2 md:space-y-0">
                     <div className="text-gray-400 md:hidden text-sm">Value:</div>
                     <div className="text-gray-300 md:text-right text-sm">
-                      {Number(formatEther(tx.value || 0n)).toFixed(3)} TESTH
+                      {Number(formatEther(tx.value || 0n)).toFixed(3)} HYPE
                     </div>
                   </div>
                 </div>

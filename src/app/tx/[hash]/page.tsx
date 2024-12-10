@@ -87,7 +87,7 @@ export default async function TransactionPage(props: any) {
               </div>
               <div className="grid grid-cols-[200px_1fr] gap-4">
                 <div className="text-gray-400">Value:</div>
-                <div>{formatEther(tx.value || 0n)} TESTH</div>
+                <div>{formatEther(tx.value || 0n)} HYPE</div>
               </div>
               <div className="grid grid-cols-[200px_1fr] gap-4">
                 <div className="text-gray-400">Gas Price:</div>
@@ -103,7 +103,7 @@ export default async function TransactionPage(props: any) {
               </div>
               <div className="grid grid-cols-[200px_1fr] gap-4">
                 <div className="text-gray-400">Total Cost:</div>
-                <div className="break-all">{gasCost} TESTH</div>
+                <div className="break-all">{gasCost} HYPE</div>
               </div>
               {decodedInteraction && (
                 <div className="grid grid-cols-[200px_1fr] gap-4">
