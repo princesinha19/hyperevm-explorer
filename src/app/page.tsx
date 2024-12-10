@@ -55,7 +55,7 @@ export default function Home() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {error ? (
+        {error instanceof Error ? (
           <RpcError />
         ) : (
           <>
