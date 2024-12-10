@@ -32,7 +32,6 @@ const processNewBlock = async (
   transactions: Transaction[];
 } | null> => {
   try {
-    // Check if block already exists
     if (existingBlocks.some(b => b.block.number === blockNumber)) {
       return null;
     }
@@ -44,22 +43,15 @@ const processNewBlock = async (
 
     const newTransactions = formatTransactions(fullBlock, blockNumber);
 
-    // Double check for race conditions
-    if (existingBlocks.some(b => b.block.number === blockNumber)) {
-      return null;
-    }
-
     const blockData = {
       block: fullBlock,
       transactions: newTransactions
     };
 
-    // Sort and slice blocks
     const newBlocks = [blockData, ...existingBlocks]
       .sort((a, b) => Number(b.block.number - a.block.number))
       .slice(0, 10);
 
-    // Combine and deduplicate transactions
     const combined = [...newTransactions, ...existingTransactions];
     const uniqueTransactions = Array.from(
       new Map(combined.map(tx => [tx.hash, tx])).values()
@@ -89,24 +81,28 @@ const fetchLatestBlocks = async (queryClient: any): Promise<{
   const lastProcessedBlock = currentData.blocks[0]?.block.number;
 
   if (!lastProcessedBlock) {
-    // Initial load
     const initialBlocks: BlockWithTransactions[] = [];
     const initialTransactions: Transaction[] = [];
 
-    for (let i = 0; i < 10; i++) {
+    const blockPromises = Array.from({ length: 10 }, (_, i) => {
       const blockNumber = currentBlock - BigInt(i);
-      const block = await publicClient.getBlock({
+      return publicClient.getBlock({
         blockNumber,
         includeTransactions: true
       });
-      
+    });
+
+    const blocks = await Promise.all(blockPromises);
+
+    blocks.forEach((block, i) => {
+      const blockNumber = currentBlock - BigInt(i);
       const transactions = formatTransactions(block, blockNumber);
       initialBlocks.push({
         block,
         transactions
       });
       initialTransactions.push(...transactions);
-    }
+    });
 
     return {
       blocks: initialBlocks.sort((a, b) => Number(b.block.number - a.block.number)),
@@ -116,7 +112,6 @@ const fetchLatestBlocks = async (queryClient: any): Promise<{
     };
   }
 
-  // Process missed blocks
   let updatedData = currentData;
   for (let i = lastProcessedBlock + 1n; i <= currentBlock; i++) {
     const result = await processNewBlock(
