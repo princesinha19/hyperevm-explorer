@@ -42,7 +42,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-[#0D1114]">
+    <main className="min-h-screen bg-[#0D1114] flex flex-col">
       <div className="border-b border-[#2B3238]">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex justify-between items-center">
@@ -54,7 +54,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-8 flex-1 w-full">
         {error instanceof Error ? (
           <RpcError />
         ) : (
@@ -105,7 +105,7 @@ export default function Home() {
         )}
       </div>
 
-      <footer className="border-t border-[#2B3238] mt-1">
+      <footer className="border-t border-[#2B3238] mt-auto">
         <div className="max-w-7xl mx-auto px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <a 
