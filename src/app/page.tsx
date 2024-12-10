@@ -112,7 +112,7 @@ export default function Home() {
               href="https://hyperfoundation.org/" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-[#3DD8AF] hover:text-[#35C69D] transition-colors text-sm"
+              className="text-[#51d2c1] hover:text-[#3db3a5] transition-colors text-sm"
             >
               © Hyperliquid
             </a>
@@ -123,7 +123,7 @@ export default function Home() {
                   href="https://x.com/im0xPrince" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-[#3DD8AF] hover:text-[#35C69D] transition-colors"
+                  className="text-[#51d2c1] hover:text-[#3db3a5] transition-colors"
                 >
                   Prince X
                 </a>
