@@ -66,7 +66,7 @@ export default function DashboardStats() {
         </div>
       </div>
       <div className="bg-[#171B20] p-4 rounded-lg border border-[#2B3238]">
-        <div className="text-gray-400 text-sm">GAS LIMIT</div>
+        <div className="text-gray-400 text-sm">Gas Limit</div>
         <div className="text-xl font-medium text-[#E1E4E7]">
           {isLoading ? <LoadingIndicator /> : '30,000,000'}
         </div>
@@ -78,13 +78,13 @@ export default function DashboardStats() {
         </div>
       </div>
       <div className="bg-[#171B20] p-4 rounded-lg border border-[#2B3238]">
-        <div className="text-gray-400 text-sm">GAS PRICE</div>
+        <div className="text-gray-400 text-sm">Gas Price</div>
         <div className="text-xl font-medium text-[#E1E4E7]">
           {isLoading ? <LoadingIndicator /> : `${stats.baseFee} Wei`}
         </div>
       </div>
       <div className="bg-[#171B20] p-4 rounded-lg border border-[#2B3238]">
-        <div className="text-gray-400 text-sm">LATEST BLOCK</div>
+        <div className="text-gray-400 text-sm">Latest Block</div>
         <div className="text-xl font-medium text-[#E1E4E7]">
           {isLoading ? <LoadingIndicator /> : stats.latestBlock}
         </div>

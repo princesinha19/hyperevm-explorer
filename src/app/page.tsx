@@ -47,9 +47,20 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex justify-between items-center">
             <Logo />
-            <span className="text-[#3DD8AF] text-sm font-medium border border-[#3DD8AF] px-3 py-1 rounded-lg">
-              HyperEVM Testnet
-            </span>
+            
+            <div className="flex items-center gap-3">
+              <a
+                href="https://hyperliquid-faucet.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#3DD8AF] text-sm font-medium border border-[#3DD8AF] px-3 py-1 rounded-lg hover:bg-[#3DD8AF] hover:text-[#0D1114] transition-colors"
+              >
+                Faucet
+              </a>
+              <span className="text-[#3DD8AF] text-sm font-medium border border-[#3DD8AF] px-3 py-1 rounded-lg">
+                HyperEVM Testnet
+              </span>
+            </div>
           </div>
         </div>
       </div>
