@@ -49,14 +49,14 @@ export default function Home() {
             <Logo />
             
             <div className="flex items-center gap-3">
-              <a
+              {/* <a
                 href="https://hyperliquid-faucet.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#3DD8AF] text-sm font-medium border border-[#3DD8AF] px-3 py-1 rounded-lg hover:bg-[#3DD8AF] hover:text-[#0D1114] transition-colors"
               >
                 Faucet
-              </a>
+              </a> */}
               <span className="text-[#3DD8AF] text-sm font-medium border border-[#3DD8AF] px-3 py-1 rounded-lg">
                 HyperEVM Mainnet
               </span>
