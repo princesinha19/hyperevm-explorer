@@ -58,7 +58,7 @@ export default function Home() {
                 Faucet
               </a>
               <span className="text-[#3DD8AF] text-sm font-medium border border-[#3DD8AF] px-3 py-1 rounded-lg">
-                HyperEVM Testnet
+                HyperEVM Mainnet
               </span>
             </div>
           </div>

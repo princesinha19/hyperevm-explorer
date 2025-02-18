@@ -15,7 +15,7 @@ export default function RpcError() {
     <div className="min-h-[200px] bg-[#171B20] rounded-lg border border-[#2B3238] p-6 flex flex-col items-center justify-center text-center">
       <div className="text-red-500 mb-2">🔌 &nbsp; RPC Connection Error</div>
       <p className="text-gray-400 mb-4">
-        Unable to connect to HyperEVM Testnet RPC. The network might be temporarily down.
+        Unable to connect to HyperEVM Mainnet RPC. The network might be temporarily down.
       </p>
       <div className="text-sm text-[#51d2c1] flex flex-col items-center gap-2">
         <span>Will retry in {countdown} seconds...</span>
