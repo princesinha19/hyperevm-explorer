@@ -20,4 +20,4 @@ export interface AbiRegistry {
     name: string;
     abi: AbiItem[];
   };
-} 
+}

@@ -20,12 +20,12 @@ export default function AddressPage() {
         const client = getPublicClient(network);
         const [balance, nonce] = await Promise.all([
           client.getBalance({ address: address as `0x${string}` }),
-          client.getTransactionCount({ address: address as `0x${string}` })
+          client.getTransactionCount({ address: address as `0x${string}` }),
         ]);
 
         setDetails({
           balance: formatEther(balance),
-          nonce
+          nonce,
         });
       } catch (error) {
         console.error('Error fetching address details:', error);
@@ -44,7 +44,7 @@ export default function AddressPage() {
       <div className="max-w-4xl mx-auto">
         <BackButton />
         <h1 className="text-2xl mb-4">Address Details</h1>
-        
+
         <div className="bg-[#171B20] rounded-lg border border-[#2B3238] p-6 mb-6">
           <div className="space-y-4">
             {loading ? (

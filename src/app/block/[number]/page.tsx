@@ -1,10 +1,10 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useNetwork } from '@/contexts/NetworkContext';
 import { getPublicClient } from '@/utils/rpc';
-import Link from 'next/link';
 import Footer from '@/components/Footer';
 import BackButton from '@/components/BackButton';
 
@@ -12,17 +12,17 @@ export default function BlockPage() {
   const { network } = useNetwork();
   const [blockData, setBlockData] = useState<any>(null);
   const { number } = useParams();
-  
+
   useEffect(() => {
     if (!number) return;
-    
+
     const blockNumber = BigInt(number as string);
-    
+
     const fetchData = async () => {
       const client = getPublicClient(network);
       const block = await client.getBlock({
         blockNumber,
-        includeTransactions: true
+        includeTransactions: true,
       });
       setBlockData(block);
     };
@@ -47,11 +47,7 @@ export default function BlockPage() {
                 </div>
                 <div className="grid grid-cols-[200px_1fr] gap-4">
                   <div className="text-gray-400">Timestamp:</div>
-                  <div>
-                    {new Date(
-                      Number(blockData.timestamp) * 1000
-                    ).toLocaleString()}
-                  </div>
+                  <div>{new Date(Number(blockData.timestamp) * 1000).toLocaleString()}</div>
                 </div>
                 <div className="grid grid-cols-[200px_1fr] gap-4">
                   <div className="text-gray-400">Transactions:</div>
@@ -70,7 +66,7 @@ export default function BlockPage() {
         <div className="bg-[#171B20] rounded-lg border border-[#2B3238] p-6">
           <div className="space-y-2">
             {blockData?.transactions.map((tx: any) => (
-              <Link 
+              <Link
                 href={`/tx/${tx.hash}`}
                 key={tx.hash}
                 className="block hover:bg-[#1A1F23] p-2 rounded"
@@ -84,4 +80,4 @@ export default function BlockPage() {
       </div>
     </div>
   );
-} 
+}

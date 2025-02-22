@@ -1,47 +1,47 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { useLatestBlocks } from '@/hooks/useLatestBlocks'
-import Logo from '@/components/Logo'
-import DashboardStats from '@/components/DashboardStats'
-import LatestBlocks from '@/components/LatestBlocks'
-import LatestTransactions from '@/components/LatestTransactions'
-import RpcError from '@/components/RpcError'
-import { useNetwork } from '@/contexts/NetworkContext'
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useLatestBlocks } from '@/hooks/useLatestBlocks';
+import Logo from '@/components/Logo';
+import DashboardStats from '@/components/DashboardStats';
+import LatestBlocks from '@/components/LatestBlocks';
+import LatestTransactions from '@/components/LatestTransactions';
+import RpcError from '@/components/RpcError';
+import { useNetwork } from '@/contexts/NetworkContext';
 
 export default function Home() {
-  const { network, setNetwork } = useNetwork()
-  const router = useRouter()
-  const { error } = useLatestBlocks(network)
-  const [searchQuery, setSearchQuery] = useState('')
+  const { network, setNetwork } = useNetwork();
+  const router = useRouter();
+  const { error } = useLatestBlocks(network);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    
-    if (!searchQuery.trim()) return
+    e.preventDefault();
+
+    if (!searchQuery.trim()) return;
 
     // Check if it's a block number (only digits)
     if (/^\d+$/.test(searchQuery)) {
-      router.push(`/block/${searchQuery}`)
-      return
+      router.push(`/block/${searchQuery}`);
+      return;
     }
 
     // Check if it's a transaction hash (0x followed by 64 hex characters)
     if (/^0x[a-fA-F0-9]{64}$/.test(searchQuery)) {
-      router.push(`/tx/${searchQuery}`)
-      return
+      router.push(`/tx/${searchQuery}`);
+      return;
     }
 
     // Check if it's an address (0x followed by 40 hex characters)
     if (/^0x[a-fA-F0-9]{40}$/.test(searchQuery)) {
-      router.push(`/address/${searchQuery}`)
-      return
+      router.push(`/address/${searchQuery}`);
+      return;
     }
 
     // If no match, show an alert
-    alert('Invalid search query. Please enter a valid block number, transaction hash, or address.')
-  }
+    alert('Invalid search query. Please enter a valid block number, transaction hash, or address.');
+  };
 
   return (
     <main className="min-h-screen bg-[#0D1114] flex flex-col">
@@ -49,9 +49,9 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex justify-between items-center">
             <Logo />
-            
+
             <div className="flex items-center gap-3">
-              <select 
+              <select
                 value={network}
                 onChange={(e) => setNetwork(e.target.value as 'mainnet' | 'testnet')}
                 className="text-[#3DD8AF] text-sm font-medium border border-[#3DD8AF] px-3 py-1 rounded-lg bg-[#171B20] cursor-pointer hover:bg-[#3DD8AF10] transition-colors"
@@ -118,9 +118,9 @@ export default function Home() {
       <footer className="border-t border-[#2B3238] mt-auto">
         <div className="max-w-7xl mx-auto px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <a 
-              href="https://hyperfoundation.org/" 
-              target="_blank" 
+            <a
+              href="https://hyperfoundation.org/"
+              target="_blank"
               rel="noopener noreferrer"
               className="text-[#51d2c1] hover:text-[#3db3a5] transition-colors text-sm"
             >
@@ -129,9 +129,9 @@ export default function Home() {
             <div className="flex items-center gap-6">
               <p className="text-[#E1E4E7] text-sm">
                 Made with ❤️ by{' '}
-                <a 
-                  href="https://x.com/im0xPrince" 
-                  target="_blank" 
+                <a
+                  href="https://x.com/im0xPrince"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="text-[#51d2c1] hover:text-[#3db3a5] transition-colors"
                 >
@@ -143,5 +143,5 @@ export default function Home() {
         </div>
       </footer>
     </main>
-  )
+  );
 }

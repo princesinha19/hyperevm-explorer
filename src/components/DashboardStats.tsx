@@ -12,7 +12,7 @@ interface Block {
 
 export default function DashboardStats() {
   const { blocks, isLoading } = useLatestBlocks(useNetwork().network);
-  
+
   const LoadingIndicator = () => (
     <div className="animate-pulse">
       <div className="h-4 w-20 bg-gray-700 rounded"></div>
@@ -31,32 +31,37 @@ export default function DashboardStats() {
 
   const calculateTPS = (blocks: Block[]) => {
     if (blocks.length < 10) return 0;
-    
+
     // Sum transactions from last 10 blocks
-    const totalTransactions = blocks.slice(0, 10).reduce((sum, block) => 
-      sum + block.block.transactions.length, 0);
-    
+    const totalTransactions = blocks
+      .slice(0, 10)
+      .reduce((sum, block) => sum + block.block.transactions.length, 0);
+
     // Calculate total time span
     const timeSpan = Number(blocks[0].block.timestamp) - Number(blocks[9].block.timestamp);
-    
+
     // Calculate TPS
     return (totalTransactions / timeSpan).toFixed(2);
   };
 
   // Calculate stats from latest blocks
-  const stats = blocks[0]?.block ? {
-    transactions: blocks[0].block.transactions.length.toString(),
-    baseFee: blocks[0].block.baseFeePerGas ? Number(blocks[0].block.baseFeePerGas).toFixed(2) : 'n/a',
-    latestBlock: blocks[0].block.number.toString(),
-    averageBlockTime: calculateAverageBlockTime(blocks),
-    tps: calculateTPS(blocks)
-  } : {
-    transactions: '0',
-    baseFee: '0',
-    latestBlock: '0',
-    averageBlockTime: '0',
-    tps: '0'
-  };
+  const stats = blocks[0]?.block
+    ? {
+        transactions: blocks[0].block.transactions.length.toString(),
+        baseFee: blocks[0].block.baseFeePerGas
+          ? Number(blocks[0].block.baseFeePerGas).toFixed(2)
+          : 'n/a',
+        latestBlock: blocks[0].block.number.toString(),
+        averageBlockTime: calculateAverageBlockTime(blocks),
+        tps: calculateTPS(blocks),
+      }
+    : {
+        transactions: '0',
+        baseFee: '0',
+        latestBlock: '0',
+        averageBlockTime: '0',
+        tps: '0',
+      };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
@@ -92,4 +97,4 @@ export default function DashboardStats() {
       </div>
     </div>
   );
-} 
+}

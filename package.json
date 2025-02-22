@@ -1,12 +1,13 @@
 {
   "name": "hyperevm-explorer",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@tanstack/react-query": "^5.62.1",
@@ -25,7 +26,14 @@
     "eslint": "^9.16.0",
     "eslint-config-next": "^15.0.4",
     "postcss": "^8",
+    "prettier": "^3.2.5",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/princesinha19/hyperevm-explorer.git"
+  },
+  "author": "Prince Sinha <sinhaprince013@gmail.com>",
+  "license": "MIT"
 }

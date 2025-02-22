@@ -5,14 +5,14 @@ import { KNOWN_ABIS } from '../constants/contractAbis';
 const ERC20_ABI = [
   'function transfer(address to, uint256 value) returns (bool)',
   'function approve(address spender, uint256 value) returns (bool)',
-  'function transferFrom(address from, address to, uint256 value) returns (bool)'
+  'function transferFrom(address from, address to, uint256 value) returns (bool)',
 ];
 
 const ERC721_ABI = [
   'function transferFrom(address from, address to, uint256 tokenId)',
   'function safeTransferFrom(address from, address to, uint256 tokenId)',
   'function approve(address to, uint256 tokenId)',
-  'function setApprovalForAll(address operator, bool approved)'
+  'function setApprovalForAll(address operator, bool approved)',
 ];
 
 export function decodeInteraction(input: string, contractAddress: string) {
@@ -31,8 +31,8 @@ export function decodeInteraction(input: string, contractAddress: string) {
           signature: decoded.signature,
           contract: {
             name: 'ERC20 Token',
-            address: contractAddress
-          }
+            address: contractAddress,
+          },
         };
       }
     } catch (e) {
@@ -51,8 +51,8 @@ export function decodeInteraction(input: string, contractAddress: string) {
           signature: decoded.signature,
           contract: {
             name: 'ERC721 Token',
-            address: contractAddress
-          }
+            address: contractAddress,
+          },
         };
       }
     } catch (e) {
@@ -80,8 +80,8 @@ export function decodeInteraction(input: string, contractAddress: string) {
         signature: decoded.signature,
         contract: {
           name: abiInfo.name,
-          address: contractAddress
-        }
+          address: contractAddress,
+        },
       };
     } catch (e) {
       console.debug('Failed to decode with known ABI:', e);

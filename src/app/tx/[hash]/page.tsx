@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useNetwork } from '@/contexts/NetworkContext';
@@ -7,7 +8,6 @@ import { getPublicClient } from '@/utils/rpc';
 import Footer from '@/components/Footer';
 import BackButton from '@/components/BackButton';
 import { formatEther } from 'ethers';
-import Link from 'next/link';
 import { decodeInteraction } from '@/utils/decodeTransaction';
 import { getRelativeTime } from '@/utils/time';
 
@@ -15,10 +15,10 @@ export default function TransactionPage() {
   const { network } = useNetwork();
   const { hash } = useParams();
   const [txData, setTxData] = useState<{
-    tx?: any,
-    receipt?: any,
-    block?: any,
-    decodedInteraction?: any
+    tx?: any;
+    receipt?: any;
+    block?: any;
+    decodedInteraction?: any;
   }>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,21 +28,20 @@ export default function TransactionPage() {
     const fetchData = async () => {
       try {
         if (!hash || !network) return;
-        
+
         setLoading(true);
         setError(null);
-        
+
         const client = getPublicClient(network);
         const [tx, receipt] = await Promise.all([
           client.getTransaction({ hash: hash as `0x${string}` }),
-          client.getTransactionReceipt({ hash: hash as `0x${string}` })
+          client.getTransactionReceipt({ hash: hash as `0x${string}` }),
         ]);
 
         if (!isMounted) return;
 
         const block = await client.getBlock({ blockNumber: tx.blockNumber });
-        const decodedInteraction = tx.to && tx.input ? 
-          decodeInteraction(tx.input, tx.to) : null;
+        const decodedInteraction = tx.to && tx.input ? decodeInteraction(tx.input, tx.to) : null;
 
         setTxData({ tx, receipt, block, decodedInteraction });
       } catch (error) {
@@ -66,11 +65,12 @@ export default function TransactionPage() {
       <div className="max-w-4xl mx-auto">
         <BackButton />
         <h1 className="text-2xl mb-4">Transaction Details</h1>
-        
+
         <div className="bg-[#171B20] rounded-lg border border-[#2B3238] p-6">
           {error ? (
             <div className="text-red-400 text-center py-8">
-              {error} - <button 
+              {error} -{' '}
+              <button
                 onClick={() => window.location.reload()}
                 className="text-[#51d2c1] hover:underline"
               >
@@ -82,9 +82,7 @@ export default function TransactionPage() {
               Loading transaction details...
             </div>
           ) : !txData.tx ? (
-            <div className="text-center text-gray-400 py-8">
-              Transaction not found
-            </div>
+            <div className="text-center text-gray-400 py-8">Transaction not found</div>
           ) : (
             <div className="space-y-4">
               <div className="grid grid-cols-[200px_1fr] gap-4">
@@ -93,7 +91,10 @@ export default function TransactionPage() {
               </div>
               <div className="grid grid-cols-[200px_1fr] gap-4">
                 <div className="text-gray-400">Block:</div>
-                <Link href={`/block/${txData.tx.blockNumber}`} className="text-[#51d2c1] hover:underline">
+                <Link
+                  href={`/block/${txData.tx.blockNumber}`}
+                  className="text-[#51d2c1] hover:underline"
+                >
                   {txData.tx.blockNumber?.toString()}
                 </Link>
               </div>
@@ -101,21 +102,25 @@ export default function TransactionPage() {
                 <div className="text-gray-400">Timestamp:</div>
                 <div>
                   {new Date(Number(txData.block.timestamp) * 1000).toLocaleString()}{' '}
-                  <span className="text-gray-400">
-                    ({getRelativeTime(txData.block.timestamp)})
-                  </span>
+                  <span className="text-gray-400">({getRelativeTime(txData.block.timestamp)})</span>
                 </div>
               </div>
               <div className="grid grid-cols-[200px_1fr] gap-4">
                 <div className="text-gray-400">From:</div>
-                <Link href={`/address/${txData.tx.from}`} className="break-all hover:text-[#51d2c1] hover:underline">
+                <Link
+                  href={`/address/${txData.tx.from}`}
+                  className="break-all hover:text-[#51d2c1] hover:underline"
+                >
                   {txData.tx.from}
                 </Link>
               </div>
               <div className="grid grid-cols-[200px_1fr] gap-4">
                 <div className="text-gray-400">To:</div>
                 {txData.tx.to ? (
-                  <Link href={`/address/${txData.tx.to}`} className="break-all hover:text-[#51d2c1] hover:underline">
+                  <Link
+                    href={`/address/${txData.tx.to}`}
+                    className="break-all hover:text-[#51d2c1] hover:underline"
+                  >
                     {txData.tx.to}
                   </Link>
                 ) : (
@@ -146,12 +151,17 @@ export default function TransactionPage() {
               </div>
               <div className="grid grid-cols-[200px_1fr] gap-4">
                 <div className="text-gray-400">Gas Used:</div>
-                <div>{txData.receipt.gasUsed.toString()} ({((Number(txData.receipt.gasUsed) / Number(txData.tx.gas)) * 100).toFixed(2)}%)</div>
+                <div>
+                  {txData.receipt.gasUsed.toString()} (
+                  {((Number(txData.receipt.gasUsed) / Number(txData.tx.gas)) * 100).toFixed(2)}%)
+                </div>
               </div>
               {txData.decodedInteraction && (
                 <div className="grid grid-cols-[200px_1fr] gap-4">
                   <div className="text-gray-400">
-                    {txData.decodedInteraction.contract?.name ? 'Decode Input Data:' : 'Input Data:'}
+                    {txData.decodedInteraction.contract?.name
+                      ? 'Decode Input Data:'
+                      : 'Input Data:'}
                   </div>
                   <div>
                     {txData.decodedInteraction.contract?.name ? (
@@ -185,7 +195,10 @@ export default function TransactionPage() {
                               {txData.decodedInteraction.args.map((arg: any, index: any) => (
                                 <div key={index} className="text-gray-300 break-all">
                                   {typeof arg === 'string' && arg.startsWith('0x') ? (
-                                    <Link href={`/address/${arg}`} className="text-[#51d2c1] hover:underline">
+                                    <Link
+                                      href={`/address/${arg}`}
+                                      className="text-[#51d2c1] hover:underline"
+                                    >
                                       {arg}
                                     </Link>
                                   ) : (
@@ -196,7 +209,7 @@ export default function TransactionPage() {
                             </div>
                           </div>
                         )}
-                        
+
                         {txData.decodedInteraction.data && (
                           <div className="mt-3">
                             <div className="text-gray-400 text-sm mb-1">Input:</div>
@@ -207,9 +220,7 @@ export default function TransactionPage() {
                         )}
                       </div>
                     ) : (
-                      <div className="text-gray-400 break-all">
-                        {txData.tx.input}
-                      </div>
+                      <div className="text-gray-400 break-all">{txData.tx.input}</div>
                     )}
                   </div>
                 </div>
@@ -221,4 +232,4 @@ export default function TransactionPage() {
       </div>
     </div>
   );
-} 
+}

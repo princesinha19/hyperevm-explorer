@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { useEffect, useState } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -11,23 +11,19 @@ const queryClient = new QueryClient({
       staleTime: 10000,
       gcTime: 1800000,
       refetchInterval: false,
-      placeholderData: 'keepPrevious'
+      placeholderData: 'keepPrevious',
     },
   },
-})
+});
 
 export default function Providers({ children }: { children: React.ReactNode }) {
-  const [mounted, setMounted] = useState(false)
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
 
-  if (!mounted) return null
+  if (!mounted) return null;
 
-  return (
-    <QueryClientProvider client={queryClient}>
-      {children}
-    </QueryClientProvider>
-  )
-} 
+  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+}
