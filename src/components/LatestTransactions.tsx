@@ -2,9 +2,10 @@ import { useLatestBlocks } from '@/hooks/useLatestBlocks';
 import { formatEther } from 'ethers';
 import Link from 'next/link';
 import { useState } from 'react';
+import { useNetwork } from '@/contexts/NetworkContext';
 
 export default function LatestTransactions() {
-  const { transactions, isLoading } = useLatestBlocks();
+  const { transactions, isLoading } = useLatestBlocks(useNetwork().network);
   const [currentPage, setCurrentPage] = useState(1);
   const transactionsPerPage = 10;
   

@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { publicClient } from '@/utils/rpc';
+import { getPublicClient } from '@/utils/rpc';
 import { Transaction } from '@/types/transaction';
 
 interface BlockWithTransactions {
@@ -26,7 +26,8 @@ const formatTransactions = (block: any, blockNumber: bigint): Transaction[] => {
 const processNewBlock = async (
   blockNumber: bigint,
   existingBlocks: BlockWithTransactions[],
-  existingTransactions: Transaction[]
+  existingTransactions: Transaction[],
+  network: 'mainnet' | 'testnet'
 ): Promise<{
   blocks: BlockWithTransactions[];
   transactions: Transaction[];
@@ -36,7 +37,7 @@ const processNewBlock = async (
       return null;
     }
     
-    const fullBlock = await publicClient.getBlock({
+    const fullBlock = await getPublicClient(network).getBlock({
       blockNumber,
       includeTransactions: true
     });
@@ -68,7 +69,10 @@ const processNewBlock = async (
   }
 };
 
-const fetchLatestBlocks = async (queryClient: any): Promise<{
+const fetchLatestBlocks = async (
+  queryClient: any,
+  network: 'mainnet' | 'testnet'
+): Promise<{
   blocks: BlockWithTransactions[];
   transactions: Transaction[];
 }> => {
@@ -78,7 +82,7 @@ const fetchLatestBlocks = async (queryClient: any): Promise<{
       transactions: Transaction[];
     } || { blocks: [], transactions: [] };
     
-    const currentBlock = await publicClient.getBlockNumber();
+    const currentBlock = await getPublicClient(network).getBlockNumber();
     const lastProcessedBlock = currentData.blocks[0]?.block.number;
     
     if (!lastProcessedBlock) {
@@ -87,7 +91,7 @@ const fetchLatestBlocks = async (queryClient: any): Promise<{
       
       const blockPromises = Array.from({ length: 10 }, (_, i) => {
         const blockNumber = currentBlock - BigInt(i);
-        return publicClient.getBlock({
+        return getPublicClient(network).getBlock({
           blockNumber,
           includeTransactions: true
         });
@@ -118,7 +122,8 @@ const fetchLatestBlocks = async (queryClient: any): Promise<{
       const result = await processNewBlock(
         i,
         updatedData.blocks,
-        updatedData.transactions
+        updatedData.transactions,
+        network
       );
       if (result) {
         updatedData = result;
@@ -134,12 +139,14 @@ const fetchLatestBlocks = async (queryClient: any): Promise<{
   }
 };
 
-export function useLatestBlocks() {
+export const useLatestBlocks = (network: 'mainnet' | 'testnet') => {
   const queryClient = useQueryClient();
   
   const { data, isLoading, isFetching, error } = useQuery({
-    queryKey: ['latestBlocks'],
-    queryFn: () => fetchLatestBlocks(queryClient),
+    queryKey: ['blocks', network],
+    queryFn: async () => {
+      return fetchLatestBlocks(queryClient, network);
+    },
     refetchInterval: (query) => query.state.error ? 30000 : 1000,
     placeholderData: undefined,
     retry: false,  
@@ -162,4 +169,4 @@ export function useLatestBlocks() {
     isFetching,
     error: error as Error | null
   };
-} 
+}; 

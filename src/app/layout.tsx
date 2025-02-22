@@ -1,6 +1,7 @@
 import '@/styles/globals.css'
 import Providers from '@/components/Providers'
 import { Metadata } from 'next'
+import { NetworkProvider } from '@/contexts/NetworkContext'
 
 export const metadata: Metadata = {
   title: 'HyperEVM Explorer',
@@ -45,7 +46,9 @@ export default function RootLayout({
       </head>
       <body>
         <Providers>
-          {children}
+          <NetworkProvider>
+            {children}
+          </NetworkProvider>
         </Providers>
       </body>
     </html>

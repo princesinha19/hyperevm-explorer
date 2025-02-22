@@ -8,11 +8,13 @@ import DashboardStats from '@/components/DashboardStats'
 import LatestBlocks from '@/components/LatestBlocks'
 import LatestTransactions from '@/components/LatestTransactions'
 import RpcError from '@/components/RpcError'
+import { useNetwork } from '@/contexts/NetworkContext'
 
 export default function Home() {
-  const [searchQuery, setSearchQuery] = useState('')
+  const { network, setNetwork } = useNetwork()
   const router = useRouter()
-  const { error } = useLatestBlocks()
+  const { error } = useLatestBlocks(network)
+  const [searchQuery, setSearchQuery] = useState('')
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -49,17 +51,14 @@ export default function Home() {
             <Logo />
             
             <div className="flex items-center gap-3">
-              {/* <a
-                href="https://hyperliquid-faucet.vercel.app/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#3DD8AF] text-sm font-medium border border-[#3DD8AF] px-3 py-1 rounded-lg hover:bg-[#3DD8AF] hover:text-[#0D1114] transition-colors"
+              <select 
+                value={network}
+                onChange={(e) => setNetwork(e.target.value as 'mainnet' | 'testnet')}
+                className="text-[#3DD8AF] text-sm font-medium border border-[#3DD8AF] px-3 py-1 rounded-lg bg-[#171B20] cursor-pointer hover:bg-[#3DD8AF10] transition-colors"
               >
-                Faucet
-              </a> */}
-              <span className="text-[#3DD8AF] text-sm font-medium border border-[#3DD8AF] px-3 py-1 rounded-lg">
-                HyperEVM Mainnet
-              </span>
+                <option value="mainnet">HyperEVM Mainnet</option>
+                <option value="testnet">HyperEVM Testnet</option>
+              </select>
             </div>
           </div>
         </div>

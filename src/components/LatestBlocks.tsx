@@ -1,9 +1,11 @@
 import { useLatestBlocks } from '@/hooks/useLatestBlocks';
 import Link from 'next/link';
 import { getRelativeTime } from '../utils/time';
+import { useNetwork } from '@/contexts/NetworkContext';
 
 export default function LatestBlocks() {
-  const { blocks, isLoading } = useLatestBlocks();
+  const { network } = useNetwork();
+  const { blocks, isLoading } = useLatestBlocks(network);
 
   if (isLoading) {
     return (
@@ -31,7 +33,10 @@ export default function LatestBlocks() {
               </div>
             </div>
             <div className="text-sm text-gray-400">
-              {getRelativeTime(block.timestamp)}
+              {block.timestamp ? 
+                getRelativeTime(block.timestamp) : 
+                'Loading...'
+              }
             </div>
           </div>
         ))}

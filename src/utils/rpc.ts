@@ -1,12 +1,19 @@
 import { createPublicClient, http } from 'viem'
 
-export const publicClient = createPublicClient({
-  transport: http('https://rpc.hyperliquid.xyz/evm', {
-    fetchOptions: {
-      mode: 'cors',
-      headers: {
-        'Access-Control-Allow-Origin': '*'
+const RPC_URLS = {
+  mainnet: 'https://rpc.hyperliquid.xyz/evm',
+  testnet: 'https://rpc.hyperliquid-testnet.xyz/evm' // Example testnet URL
+};
+
+export const getPublicClient = (network: 'mainnet' | 'testnet') => {
+  return createPublicClient({
+    transport: http(RPC_URLS[network], {
+      fetchOptions: {
+        mode: 'cors',
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
       }
-    }
+    })
   })
-}) 
+} 

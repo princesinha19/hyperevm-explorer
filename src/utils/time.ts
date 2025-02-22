@@ -1,4 +1,6 @@
 export function getRelativeTime(timestamp: bigint): string {
+  if (!timestamp) return 'Just now';
+  
   const now = Math.floor(Date.now() / 1000);
   const diff = now - Number(timestamp);
 

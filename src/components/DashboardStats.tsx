@@ -1,4 +1,5 @@
 import { useLatestBlocks } from '@/hooks/useLatestBlocks';
+import { useNetwork } from '@/contexts/NetworkContext';
 
 interface Block {
   block: {
@@ -10,7 +11,7 @@ interface Block {
 }
 
 export default function DashboardStats() {
-  const { blocks, isLoading } = useLatestBlocks();
+  const { blocks, isLoading } = useLatestBlocks(useNetwork().network);
   
   const LoadingIndicator = () => (
     <div className="animate-pulse">
@@ -80,7 +81,7 @@ export default function DashboardStats() {
       <div className="bg-[#171B20] p-4 rounded-lg border border-[#2B3238]">
         <div className="text-gray-400 text-sm">Gas Price</div>
         <div className="text-xl font-medium text-[#E1E4E7]">
-          {isLoading ? <LoadingIndicator /> : `${stats.baseFee} Wei`}
+          {isLoading ? <LoadingIndicator /> : `${(Number(stats.baseFee) / 1e9).toFixed(3)} Gwei`}
         </div>
       </div>
       <div className="bg-[#171B20] p-4 rounded-lg border border-[#2B3238]">
